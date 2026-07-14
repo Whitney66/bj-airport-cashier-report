@@ -138,33 +138,25 @@
             <div class="dropdown" id="groupDropdown"><button class="select" type="button" aria-haspopup="listbox"><span class="select-label" id="groupLabel">全部柜组</span><span class="chev"></span></button><div class="dropdown-menu" id="groupMenu"></div></div>
             <div class="dropdown" id="timeDropdown"><button class="select" type="button" aria-haspopup="listbox"><span class="select-label" id="timeLabel">今日</span><span class="chev"></span></button><div class="dropdown-menu"><button type="button" data-time="昨日">昨日</button><button class="active" type="button" data-time="今日">今日</button><button type="button" data-time="本月">本月</button><button type="button" data-time="本年">本年</button></div></div>
           </div>
-          <div class="period">统计周期：2022-10-30 0:00:00~23:59:59</div>
-          <div class="notice"><span>今日收银件数最高柜组</span><span class="price">IWC柜组</span><span>253件</span></div>
+          <div class="period" id="periodText">统计周期：2022-10-30 0:00:00~23:59:59</div>
+          <div class="notice"><span id="noticePrefix">今日收银件数最高柜组</span><span class="price" id="noticeGroup">72222201</span><span id="noticeCount">253件</span></div>
 
           <div class="content">
             <section class="summary-grid" aria-label="收银指标卡片">
-              <article class="card summary-card"><div class="card-title">收银件数</div><div class="big">253 <small>件</small></div><div class="trend"><span>环比 ↑ 50%</span><span>同比 ↑ 30%</span></div></article>
-              <article class="card summary-card"><div class="card-title">件数排名</div><div class="rank-line"><span>超过本柜组<span class="accent">50%</span>的收银</span></div><strong>相较昨日上升1名</strong></article>
+              <article class="card summary-card"><div class="card-title">收银件数</div><div class="big"><span id="cashierCount">253</span> <small>件</small></div><div class="trend"><span id="momTrend">环比 ↑ 50%</span><span id="yoyTrend">同比 ↑ 30%</span></div></article>
+              <article class="card summary-card"><div class="card-title">件数排名</div><div class="rank-line"><span>超过本柜组<span class="accent" id="rankPercent">50%</span>的收银</span></div><strong id="rankChange">相较昨日上升1名</strong></article>
             </section>
 
             <section class="column-grid" aria-label="收银指标专栏">
-              <article class="card metric-tile"><div class="num">100</div><div class="label">成交单数</div><div class="sub">环比 ↑ 12%</div></article>
-              <article class="card metric-tile"><div class="num">2.5</div><div class="label">连带率</div><div class="sub">同比 ↑ 0.3</div></article>
-              <article class="card metric-tile"><button class="drill" type="button" data-return-view="amount"><div class="num">20,235</div><div class="label">退货金额 ›</div><div class="sub">点击查看明细</div></button></article>
-              <article class="card metric-tile"><button class="drill" type="button" data-return-view="count"><div class="num">14</div><div class="label">退货件数 ›</div><div class="sub">点击查看明细</div></button></article>
+              <article class="card metric-tile"><div class="num" id="orderCount">100</div><div class="label">成交单数</div><div class="sub" id="orderTrend">环比 ↑ 12%</div></article>
+              <article class="card metric-tile"><div class="num" id="jointRate">2.5</div><div class="label">连带率</div><div class="sub" id="jointTrend">同比 ↑ 0.3</div></article>
+              <article class="card metric-tile"><button class="drill" type="button" data-return-view="amount"><div class="num" id="returnAmount">20,235</div><div class="label">退货金额 ›</div><div class="sub">点击查看明细</div></button></article>
+              <article class="card metric-tile"><button class="drill" type="button" data-return-view="count"><div class="num" id="returnCount">14</div><div class="label">退货件数 ›</div><div class="sub">点击查看明细</div></button></article>
             </section>
 
             <section class="card chart-card" aria-label="收银走势">
               <h2 class="section-title">收银走势</h2>
-              <div class="chart-wrap" data-chart="bar">
-                <svg viewBox="0 0 350 230" width="100%" height="100%" aria-label="收银件数柱状图">
-                  <g stroke="#e4e9ee"><line x1="58" y1="28" x2="326" y2="28"/><line x1="58" y1="68" x2="326" y2="68"/><line x1="58" y1="108" x2="326" y2="108"/><line x1="58" y1="148" x2="326" y2="148"/><line x1="58" y1="188" x2="326" y2="188"/></g>
-                  <g fill="#4d5a66" font-size="12"><text x="26" y="32">300</text><text x="26" y="72">240</text><text x="26" y="112">180</text><text x="26" y="152">120</text><text x="34" y="192">60</text></g>
-                  <g fill="#2f7df0"><rect x="76" y="120" width="30" height="68" rx="4"/><rect x="132" y="88" width="30" height="100" rx="4"/><rect x="188" y="42" width="30" height="146" rx="4"/><rect x="244" y="108" width="30" height="80" rx="4"/><rect x="300" y="72" width="30" height="116" rx="4"/></g>
-                  <g fill="#4d5a66" font-size="12"><text x="79" y="210">9时</text><text x="135" y="210">10时</text><text x="191" y="210">11时</text><text x="247" y="210">12时</text><text x="303" y="210">13时</text></g>
-                </svg>
-                <div class="tooltip">11时：253件</div>
-              </div>
+              <div class="chart-wrap" id="trendChart" data-chart="bar"></div>
             </section>
 
             <section class="card distribution" aria-label="销售分布">
@@ -199,17 +191,102 @@
     const groupLabel = document.getElementById('groupLabel');
     const groupMenu = document.getElementById('groupMenu');
     const timeLabel = document.getElementById('timeLabel');
+    const periodText = document.getElementById('periodText');
+    const noticePrefix = document.getElementById('noticePrefix');
+    const noticeGroup = document.getElementById('noticeGroup');
+    const noticeCount = document.getElementById('noticeCount');
+    const cashierCount = document.getElementById('cashierCount');
+    const momTrend = document.getElementById('momTrend');
+    const yoyTrend = document.getElementById('yoyTrend');
+    const rankPercent = document.getElementById('rankPercent');
+    const rankChange = document.getElementById('rankChange');
+    const orderCount = document.getElementById('orderCount');
+    const orderTrend = document.getElementById('orderTrend');
+    const jointRate = document.getElementById('jointRate');
+    const jointTrend = document.getElementById('jointTrend');
+    const returnAmount = document.getElementById('returnAmount');
+    const returnCount = document.getElementById('returnCount');
+    const trendChart = document.getElementById('trendChart');
     const distributionBody = document.getElementById('distributionBody');
     const tableGroups = groupCodes.slice(1);
+    const periodMap = {
+      '昨日': '统计周期：2022-10-29 0:00:00~23:59:59',
+      '今日': '统计周期：2022-10-30 0:00:00~23:59:59',
+      '本月': '统计周期：2022-10-01 0:00:00~2022-10-30 23:59:59',
+      '本年': '统计周期：2022-01-01 0:00:00~2022-10-30 23:59:59'
+    };
+    let currentGroup = '全部柜组';
+    let currentTime = '今日';
 
     groupMenu.innerHTML = groupCodes.map((code, index) => `<button class="${index === 0 ? 'active' : ''}" type="button" data-group="${code}">${code}</button>`).join('');
-    distributionBody.innerHTML = tableGroups.map((code, index) => {
-      const cashierCount = 253 - (index * 3 % 92);
-      const orders = 100 - (index * 2 % 37);
-      const returnAmount = (20235 - (index * 517 % 12800)).toLocaleString('zh-CN');
-      const returnCount = 14 - (index % 9);
-      return `<tr><td>${code}</td><td>${cashierCount}</td><td>${orders}</td><td>${returnAmount}</td><td>${returnCount}</td></tr>`;
-    }).join('');
+
+    function metricFor(code, index, time) {
+      const scale = { '昨日': 0.86, '今日': 1, '本月': 18.4, '本年': 142 }[time];
+      const base = 253 - (index * 3 % 92);
+      const count = Math.round(base * scale);
+      const orders = Math.max(1, Math.round((100 - (index * 2 % 37)) * scale));
+      const amount = Math.round((20235 - (index * 517 % 12800)) * scale);
+      const returns = Math.max(0, Math.round((14 - (index % 9)) * Math.max(1, scale / 3)));
+      return { code, count, orders, amount, returns, rate: (count / orders).toFixed(1), rank: index + 1 };
+    }
+
+    function currentRows() {
+      const rows = tableGroups.map((code, index) => metricFor(code, index, currentTime));
+      return currentGroup === '全部柜组' ? rows : rows.filter(row => row.code === currentGroup);
+    }
+
+    function formatNumber(value) {
+      return value.toLocaleString('zh-CN');
+    }
+
+    function renderTrendChart(summary) {
+      const labels = currentTime === '本年'
+        ? ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月']
+        : currentTime === '本月'
+          ? ['1日', '5日', '10日', '15日', '20日', '25日', '30日']
+          : ['9时', '10时', '11时', '12时', '13时'];
+      const values = labels.map((_, index) => Math.max(12, Math.round(summary.count * (0.48 + ((index * 17) % 39) / 100))));
+      const maxValue = Math.max(...values);
+      const grid = [0, 1, 2, 3, 4].map(i => `<line x1="58" y1="${28 + i * 40}" x2="326" y2="${28 + i * 40}"/>`).join('');
+      const bars = values.map((value, index) => {
+        const slot = 268 / values.length;
+        const barWidth = Math.min(30, slot - 10);
+        const height = Math.max(12, value / maxValue * 146);
+        const x = 66 + index * slot + (slot - barWidth) / 2;
+        const y = 188 - height;
+        return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(1)}" rx="4"/>`;
+      }).join('');
+      const ticks = labels.map((label, index) => {
+        const slot = 268 / labels.length;
+        const x = 66 + index * slot + slot / 2 - 10;
+        return `<text x="${x.toFixed(1)}" y="210">${label}</text>`;
+      }).join('');
+      trendChart.innerHTML = `<svg viewBox="0 0 350 230" width="100%" height="100%" aria-label="收银件数柱状图"><g stroke="#e4e9ee">${grid}</g><g fill="#4d5a66" font-size="12"><text x="20" y="32">${formatNumber(maxValue)}</text><text x="20" y="112">${formatNumber(Math.round(maxValue / 2))}</text><text x="34" y="192">0</text></g><g fill="#2f7df0">${bars}</g><g fill="#4d5a66" font-size="12">${ticks}</g></svg><div class="tooltip">${labels[Math.floor(labels.length / 2)]}：${formatNumber(values[Math.floor(values.length / 2)])}件</div>`;
+      bindChartTooltip(trendChart);
+    }
+
+    function applyFilters() {
+      const rows = currentRows();
+      const summary = rows.reduce((acc, row) => ({ count: acc.count + row.count, orders: acc.orders + row.orders, amount: acc.amount + row.amount, returns: acc.returns + row.returns }), { count: 0, orders: 0, amount: 0, returns: 0 });
+      const leader = rows.slice().sort((a, b) => b.count - a.count)[0] || metricFor(tableGroups[0], 0, currentTime);
+      periodText.textContent = periodMap[currentTime];
+      noticePrefix.textContent = currentGroup === '全部柜组' ? `${currentTime}收银件数最高柜组` : `${currentTime}当前柜组`;
+      noticeGroup.textContent = leader.code;
+      noticeCount.textContent = `${formatNumber(leader.count)}件`;
+      cashierCount.textContent = formatNumber(summary.count);
+      momTrend.textContent = `环比 ↑ ${currentTime === '本年' ? 18 : currentTime === '本月' ? 24 : 50}%`;
+      yoyTrend.textContent = `同比 ↑ ${currentTime === '本年' ? 12 : currentTime === '本月' ? 19 : 30}%`;
+      rankPercent.textContent = currentGroup === '全部柜组' ? '50%' : `${Math.max(8, 60 - leader.rank)}%`;
+      rankChange.textContent = currentGroup === '全部柜组' ? '整体排名按柜组明细展示' : `当前排名第${leader.rank}名`;
+      orderCount.textContent = formatNumber(summary.orders);
+      orderTrend.textContent = `环比 ↑ ${currentTime === '昨日' ? 8 : 12}%`;
+      jointRate.textContent = summary.orders ? (summary.count / summary.orders).toFixed(1) : '0.0';
+      jointTrend.textContent = `同比 ↑ ${currentTime === '本年' ? '0.6' : '0.3'}`;
+      returnAmount.textContent = formatNumber(summary.amount);
+      returnCount.textContent = formatNumber(summary.returns);
+      distributionBody.innerHTML = rows.map(row => `<tr><td>${row.code}</td><td>${formatNumber(row.count)}</td><td>${formatNumber(row.orders)}</td><td>${formatNumber(row.amount)}</td><td>${formatNumber(row.returns)}</td></tr>`).join('');
+      renderTrendChart(summary);
+    }
 
     function showPage(name) {
       Object.entries(pages).forEach(([key, el]) => el.classList.toggle('active', key === name));
@@ -237,17 +314,21 @@
 
       const groupBtn = event.target.closest('[data-group]');
       if (groupBtn) {
-        groupLabel.textContent = groupBtn.dataset.group;
+        currentGroup = groupBtn.dataset.group;
+        groupLabel.textContent = currentGroup;
         groupMenu.querySelectorAll('[data-group]').forEach(btn => btn.classList.toggle('active', btn === groupBtn));
         groupBtn.closest('.dropdown').classList.remove('open');
+        applyFilters();
         return;
       }
 
       const timeBtn = event.target.closest('[data-time]');
       if (timeBtn) {
-        timeLabel.textContent = timeBtn.dataset.time;
+        currentTime = timeBtn.dataset.time;
+        timeLabel.textContent = currentTime;
         document.querySelectorAll('[data-time]').forEach(btn => btn.classList.toggle('active', btn === timeBtn));
         timeBtn.closest('.dropdown').classList.remove('open');
+        applyFilters();
         return;
       }
 
@@ -275,17 +356,22 @@
     });
 
     function bindChartTooltip(wrap) {
-      const tip = wrap.querySelector('.tooltip');
-      if (!tip) return;
+      if (wrap.dataset.tooltipBound === 'true') return;
+      wrap.dataset.tooltipBound = 'true';
       wrap.addEventListener('pointermove', (event) => {
+        const tip = wrap.querySelector('.tooltip');
+        if (!tip) return;
         const rect = wrap.getBoundingClientRect();
         tip.style.left = `${event.clientX - rect.left}px`;
         tip.style.top = `${event.clientY - rect.top}px`;
         tip.classList.add('visible');
       });
-      wrap.addEventListener('pointerleave', () => tip.classList.remove('visible'));
+      wrap.addEventListener('pointerleave', () => {
+        const tip = wrap.querySelector('.tooltip');
+        if (tip) tip.classList.remove('visible');
+      });
     }
-    document.querySelectorAll('.chart-wrap').forEach(bindChartTooltip);
+    applyFilters();
 
   </script>
 </body>
