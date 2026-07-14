@@ -98,10 +98,14 @@
     .table-scroller::-webkit-scrollbar { height: 7px; }
     .table-scroller::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 999px; }
     .table-scroller::-webkit-scrollbar-thumb { background: #bfc4c8; border-radius: 999px; }
-    table { border-collapse: separate; border-spacing: 0; min-width: 760px; width: 760px; background: #fff; font-size: 13px; }
-    th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px 8px; text-align: center; white-space: nowrap; }
+    table { border-collapse: separate; border-spacing: 0; min-width: 520px; width: 520px; background: #fff; font-size: 13px; table-layout: fixed; }
+    th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px 6px; text-align: center; white-space: nowrap; }
     th { font-weight: 600; border-top: 1px solid var(--line); background: #fbfcfd; }
-    td:first-child, th:first-child { position: sticky; left: 0; z-index: 2; min-width: 122px; max-width: 122px; text-align: left; background: #fff; border-left: 1px solid var(--line); box-shadow: 5px 0 8px rgba(0,0,0,.04); }
+    td:first-child, th:first-child { position: sticky; left: 0; z-index: 2; width: 108px; min-width: 108px; max-width: 108px; text-align: left; background: #fff; border-left: 1px solid var(--line); box-shadow: 5px 0 8px rgba(0,0,0,.04); }
+    th:nth-child(2), td:nth-child(2) { width: 82px; }
+    th:nth-child(3), td:nth-child(3) { width: 74px; }
+    th:nth-child(4), td:nth-child(4) { width: 102px; }
+    th:nth-child(5), td:nth-child(5) { width: 82px; }
     th:first-child { z-index: 3; background: #fbfcfd; }
 
     .return-list { padding: 18px 12px 28px; }
@@ -167,13 +171,8 @@
               <div class="distribution-head"><h2 class="section-title">销售分布</h2></div>
               <div class="table-scroller">
                 <table>
-                  <thead><tr><th>柜组名称</th><th>收银件数</th><th>件数排名</th><th>成交单数</th><th>连带率</th><th>退货金额</th><th>退货件数</th></tr></thead>
-                  <tbody>
-                    <tr><td>IWC柜组</td><td>253</td><td>1</td><td>100</td><td>2.5</td><td>20,235</td><td>14</td></tr>
-                    <tr><td>科颜氏柜组</td><td>226</td><td>2</td><td>92</td><td>2.3</td><td>16,820</td><td>11</td></tr>
-                    <tr><td>YSL柜组</td><td>205</td><td>3</td><td>86</td><td>2.1</td><td>12,560</td><td>9</td></tr>
-                    <tr><td>赫莲娜柜组</td><td>188</td><td>4</td><td>76</td><td>2.0</td><td>9,860</td><td>6</td></tr>
-                  </tbody>
+                  <thead><tr><th>柜组名称</th><th>收银件数</th><th>成交单数</th><th>退货金额</th><th>退货件数</th></tr></thead>
+                  <tbody id="distributionBody"></tbody>
                 </table>
               </div>
             </section>
@@ -200,8 +199,17 @@
     const groupLabel = document.getElementById('groupLabel');
     const groupMenu = document.getElementById('groupMenu');
     const timeLabel = document.getElementById('timeLabel');
+    const distributionBody = document.getElementById('distributionBody');
+    const tableGroups = groupCodes.slice(1);
 
     groupMenu.innerHTML = groupCodes.map((code, index) => `<button class="${index === 0 ? 'active' : ''}" type="button" data-group="${code}">${code}</button>`).join('');
+    distributionBody.innerHTML = tableGroups.map((code, index) => {
+      const cashierCount = 253 - (index * 3 % 92);
+      const orders = 100 - (index * 2 % 37);
+      const returnAmount = (20235 - (index * 517 % 12800)).toLocaleString('zh-CN');
+      const returnCount = 14 - (index % 9);
+      return `<tr><td>${code}</td><td>${cashierCount}</td><td>${orders}</td><td>${returnAmount}</td><td>${returnCount}</td></tr>`;
+    }).join('');
 
     function showPage(name) {
       Object.entries(pages).forEach(([key, el]) => el.classList.toggle('active', key === name));
