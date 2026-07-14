@@ -52,9 +52,16 @@
     .back { width: 34px; height: 34px; margin-left: 18px; display: grid; place-items: center; }
     .back svg { width: 24px; height: 24px; stroke-width: 3; }
 
-    .toolbar { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); min-height: 72px; align-items: center; padding: 0 28px; font-size: 16px; gap: 24px; }
-    .select { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .toolbar { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); min-height: 72px; align-items: center; padding: 0 28px; font-size: 16px; gap: 24px; position: relative; z-index: 5; }
+    .dropdown { position: relative; min-width: 0; }
+    .select { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 44px; }
+    .select-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .chev { width: 12px; height: 12px; border-right: 2px solid #64717a; border-bottom: 2px solid #64717a; transform: rotate(45deg); margin-top: -6px; flex: none; }
+    .dropdown-menu { position: absolute; top: 50px; left: 0; right: 0; max-height: 0; overflow: hidden; opacity: 0; background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 24px rgba(15, 23, 42, .16); transition: max-height .18s ease, opacity .18s ease; }
+    .dropdown.open .dropdown-menu { max-height: 330px; opacity: 1; overflow-y: auto; }
+    .dropdown-menu button { display: block; width: 100%; min-height: 42px; padding: 10px 14px; text-align: left; font-size: 15px; border-bottom: 1px solid #edf0f3; }
+    .dropdown-menu button:last-child { border-bottom: 0; }
+    .dropdown-menu button.active { color: var(--blue); font-weight: 700; background: #f4f8ff; }
     .period { text-align: center; color: #9aa4af; font-size: 12px; font-weight: 600; padding: 12px 16px 10px; }
     .notice { display: flex; align-items: center; gap: 9px; padding: 8px 22px 14px; font-weight: 700; font-size: 14px; }
     .notice .price, .accent { color: var(--orange); font-weight: 600; }
@@ -119,7 +126,10 @@
       <main class="app">
         <section class="page active" id="dashboardPage">
           <header class="topbar"><button class="back" aria-label="返回"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 4 7 12l8 8"/></svg></button><div class="title">收银分析看板</div><div></div></header>
-          <div class="toolbar"><div class="select"><span>全部柜组</span><span class="chev"></span></div><div class="select"><span>今日</span><span class="chev"></span></div></div>
+          <div class="toolbar">
+            <div class="dropdown" id="groupDropdown"><button class="select" type="button" aria-haspopup="listbox"><span class="select-label" id="groupLabel">全部柜组</span><span class="chev"></span></button><div class="dropdown-menu" id="groupMenu"></div></div>
+            <div class="dropdown" id="timeDropdown"><button class="select" type="button" aria-haspopup="listbox"><span class="select-label" id="timeLabel">今日</span><span class="chev"></span></button><div class="dropdown-menu"><button type="button" data-time="昨日">昨日</button><button class="active" type="button" data-time="今日">今日</button><button type="button" data-time="本月">本月</button><button type="button" data-time="本年">本年</button></div></div>
+          </div>
           <div class="period">统计周期：2022-10-30 0:00:00~23:59:59</div>
           <div class="notice"><span>今日收银件数最高柜组</span><span class="price">IWC柜组</span><span>253件</span></div>
 
@@ -170,6 +180,12 @@
   <script>
     const pages = { dashboard: document.getElementById('dashboardPage'), returns: document.getElementById('returnPage') };
     const returnTitle = document.getElementById('returnTitle');
+    const groupCodes = ['全部柜组', '72222201', '72222401', '72221301', '72222501', '72221201', '72221501', '72222301', '72222901', '72221601', '72221602', '72221603', '72221604', '72221605', '72221607', '72221801', '72221704', '72222801', '72222802', '72222803', '72222804', '72222805', '72222806', '72221401', '72221606', '72221701', '72221702', '72221802', '72221901', '72221902', '72222601', '72222602', '72222603', '72222604', '72222701', '72222702', '72223001', '72225101', '72225102', '72225103', '72225104'];
+    const groupLabel = document.getElementById('groupLabel');
+    const groupMenu = document.getElementById('groupMenu');
+    const timeLabel = document.getElementById('timeLabel');
+
+    groupMenu.innerHTML = groupCodes.map((code, index) => `<button class="${index === 0 ? 'active' : ''}" type="button" data-group="${code}">${code}</button>`).join('');
 
     function showPage(name) {
       Object.entries(pages).forEach(([key, el]) => el.classList.toggle('active', key === name));
@@ -187,6 +203,30 @@
     }
 
     document.addEventListener('click', (event) => {
+      const selectBtn = event.target.closest('.select');
+      if (selectBtn) {
+        const dropdown = selectBtn.closest('.dropdown');
+        document.querySelectorAll('.dropdown.open').forEach(item => { if (item !== dropdown) item.classList.remove('open'); });
+        dropdown.classList.toggle('open');
+        return;
+      }
+
+      const groupBtn = event.target.closest('[data-group]');
+      if (groupBtn) {
+        groupLabel.textContent = groupBtn.dataset.group;
+        groupMenu.querySelectorAll('[data-group]').forEach(btn => btn.classList.toggle('active', btn === groupBtn));
+        groupBtn.closest('.dropdown').classList.remove('open');
+        return;
+      }
+
+      const timeBtn = event.target.closest('[data-time]');
+      if (timeBtn) {
+        timeLabel.textContent = timeBtn.dataset.time;
+        document.querySelectorAll('[data-time]').forEach(btn => btn.classList.toggle('active', btn === timeBtn));
+        timeBtn.closest('.dropdown').classList.remove('open');
+        return;
+      }
+
       const returnBtn = event.target.closest('[data-return-view]');
       if (returnBtn) {
         showReturnDetail(returnBtn.dataset.returnView);
@@ -204,7 +244,10 @@
         const card = toggle.closest('.return-card');
         card.classList.toggle('open');
         toggle.textContent = card.classList.contains('open') ? '⌄' : '⌃';
+        return;
       }
+
+      document.querySelectorAll('.dropdown.open').forEach(item => item.classList.remove('open'));
     });
 
   </script>
