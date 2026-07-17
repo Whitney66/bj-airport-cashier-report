@@ -52,6 +52,11 @@
     .back { width: 34px; height: 34px; margin-left: 18px; display: grid; place-items: center; }
     .back svg { width: 24px; height: 24px; stroke-width: 3; }
 
+    .staff-profile { display: grid; grid-template-columns: 56px 1fr; align-items: center; gap: 13px; min-height: 82px; padding: 14px 24px; background: #fff; border-bottom: 1px solid #edf0f3; }
+    .avatar { width: 54px; height: 54px; border-radius: 50%; background: #f0f2f4; display: grid; place-items: center; overflow: hidden; }
+    .avatar svg { width: 48px; height: 48px; }
+    .staff-name { font-size: 17px; font-weight: 700; margin-bottom: 5px; }
+    .staff-meta { color: #6f7d89; font-size: 12px; }
     .toolbar { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); min-height: 72px; align-items: center; padding: 0 28px; font-size: 16px; gap: 24px; position: relative; z-index: 5; }
     .dropdown { position: relative; min-width: 0; }
     .select { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 44px; }
@@ -85,10 +90,9 @@
     .drill .num, .linkish { color: var(--blue); }
 
     .section-title { font-size: 17px; font-weight: 800; margin: 0 0 14px 0; }
-    .chart-card { padding: 18px 12px 12px; margin-bottom: 14px; }
-    .chart-wrap { position: relative; height: 246px; }
-    .tooltip { position: absolute; transform: translate(-50%, -118%); background: rgba(18, 24, 33, .92); color: #fff; border-radius: 5px; padding: 5px 8px; font-size: 12px; pointer-events: none; opacity: 0; transition: opacity .12s; white-space: nowrap; }
-    .tooltip.visible { opacity: 1; }
+    .ranking { padding: 17px 10px 20px; margin-bottom: 14px; overflow: hidden; }
+    .ranking-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 0 4px 12px; }
+    .ranking-note { color: var(--muted); font-size: 12px; font-weight: 600; }
 
     .distribution { padding: 17px 10px 24px; overflow: hidden; }
     .distribution-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 4px 14px; }
@@ -99,6 +103,11 @@
     .table-scroller::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 999px; }
     .table-scroller::-webkit-scrollbar-thumb { background: #bfc4c8; border-radius: 999px; }
     table { border-collapse: separate; border-spacing: 0; min-width: 520px; width: 520px; background: #fff; font-size: 13px; table-layout: fixed; }
+    .ranking table { min-width: 100%; width: 100%; }
+    .ranking td:first-child, .ranking th:first-child { width: 58px; min-width: 58px; max-width: 58px; text-align: center; }
+    .ranking th:nth-child(2), .ranking td:nth-child(2) { width: 96px; }
+    .ranking th:nth-child(3), .ranking td:nth-child(3), .ranking th:nth-child(4), .ranking td:nth-child(4) { width: auto; }
+    .rank-no { font-weight: 800; color: var(--blue); }
     th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px 6px; text-align: center; white-space: nowrap; }
     th { font-weight: 600; border-top: 1px solid var(--line); background: #fbfcfd; }
     td:first-child, th:first-child { position: sticky; left: 0; z-index: 2; width: 108px; min-width: 108px; max-width: 108px; text-align: left; background: #fff; border-left: 1px solid var(--line); box-shadow: 5px 0 8px rgba(0,0,0,.04); }
@@ -134,6 +143,10 @@
       <main class="app">
         <section class="page active" id="dashboardPage">
           <header class="topbar"><button class="back" aria-label="返回"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 4 7 12l8 8"/></svg></button><div class="title">收银分析看板</div><div></div></header>
+          <section class="staff-profile" aria-label="员工信息">
+            <div class="avatar" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" fill="#eceff2"/><path d="M15 30c6-8 16-11 29-7 4 1 7 4 8 8-9-2-18-1-28 3-4-1-7-2-9-4Z" fill="#222"/><path d="M17 34c7 5 18 8 32 2-1 13-8 20-17 20-8 0-14-7-15-22Z" fill="#f6f7f8"/><path d="M14 24c9 5 23 6 37 1" stroke="#848b92" stroke-width="2"/><circle cx="25" cy="40" r="2" fill="#222"/><circle cx="39" cy="40" r="2" fill="#222"/><path d="M28 48c3 2 6 2 9 0" stroke="#d94f54" stroke-width="2" stroke-linecap="round"/></svg></div>
+            <div><div class="staff-name">小毛</div><div class="staff-meta">122353</div></div>
+          </section>
           <div class="toolbar">
             <div class="dropdown" id="groupDropdown"><button class="select" type="button" aria-haspopup="listbox"><span class="select-label" id="groupLabel">全部柜组</span><span class="chev"></span></button><div class="dropdown-menu" id="groupMenu"></div></div>
             <div class="dropdown" id="timeDropdown"><button class="select" type="button" aria-haspopup="listbox"><span class="select-label" id="timeLabel">今日</span><span class="chev"></span></button><div class="dropdown-menu"><button type="button" data-time="昨日">昨日</button><button class="active" type="button" data-time="今日">今日</button><button type="button" data-time="本月">本月</button><button type="button" data-time="本年">本年</button></div></div>
@@ -148,22 +161,34 @@
             </section>
 
             <section class="column-grid" aria-label="收银指标专栏">
-              <article class="card metric-tile"><div class="num" id="orderCount">100</div><div class="label">成交单数</div><div class="sub" id="orderTrend">环比 ↑ 12%</div></article>
-              <article class="card metric-tile"><div class="num" id="jointRate">2.5</div><div class="label">连带率</div><div class="sub" id="jointTrend">同比 ↑ 0.3</div></article>
+              <article class="card metric-tile"><div class="num" id="orderCount">100</div><div class="label">成交单数</div><div class="sub" id="orderTrend">环比 ↑ 12%　同比 ↑ 18%</div></article>
+              <article class="card metric-tile"><div class="num" id="jointCount">153</div><div class="label">连带件数</div><div class="sub" id="jointCountTrend">环比 ↑ 10%</div></article>
+              <article class="card metric-tile"><div class="num" id="jointRate">2.5</div><div class="label">连带率</div><div class="sub" id="jointTrend">环比 ↑ 0.2　同比 ↑ 0.3</div></article>
               <article class="card metric-tile"><button class="drill" type="button" data-return-view="amount"><div class="num" id="returnAmount">20,235</div><div class="label">退货金额 ›</div><div class="sub">点击查看明细</div></button></article>
               <article class="card metric-tile"><button class="drill" type="button" data-return-view="count"><div class="num" id="returnCount">14</div><div class="label">退货件数 ›</div><div class="sub">点击查看明细</div></button></article>
             </section>
 
-            <section class="card chart-card" aria-label="收银走势">
-              <h2 class="section-title">收银走势</h2>
-              <div class="chart-wrap" id="trendChart" data-chart="bar"></div>
+            <section class="card ranking" aria-label="收银排名">
+              <div class="ranking-head"><h2 class="section-title">收银排名</h2><span class="ranking-note">按收银件数排名</span></div>
+              <table>
+                <thead><tr><th>排名</th><th>姓名</th><th>成交单数</th><th>收银件数</th></tr></thead>
+                <tbody id="cashierRankingBody"></tbody>
+              </table>
+            </section>
+
+            <section class="card ranking" id="jointRankingSection" aria-label="连带率排名">
+              <div class="ranking-head"><h2 class="section-title">连带率排名</h2><span class="ranking-note">本月按连带件数排名</span></div>
+              <table>
+                <thead><tr><th>排名</th><th>姓名</th><th>连带件数</th><th>连带率</th></tr></thead>
+                <tbody id="jointRankingBody"></tbody>
+              </table>
             </section>
 
             <section class="card distribution" aria-label="销售分布">
               <div class="distribution-head"><h2 class="section-title">销售分布</h2></div>
               <div class="table-scroller">
                 <table>
-                  <thead><tr><th>柜组名称</th><th>收银件数</th><th>成交单数</th><th>退货金额</th><th>退货件数</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>收银件数</th><th>成交单数</th><th>连带件数</th><th>退货金额</th><th>退货件数</th></tr></thead>
                   <tbody id="distributionBody"></tbody>
                 </table>
               </div>
@@ -202,13 +227,18 @@
     const rankChange = document.getElementById('rankChange');
     const orderCount = document.getElementById('orderCount');
     const orderTrend = document.getElementById('orderTrend');
+    const jointCount = document.getElementById('jointCount');
+    const jointCountTrend = document.getElementById('jointCountTrend');
     const jointRate = document.getElementById('jointRate');
     const jointTrend = document.getElementById('jointTrend');
     const returnAmount = document.getElementById('returnAmount');
     const returnCount = document.getElementById('returnCount');
-    const trendChart = document.getElementById('trendChart');
+    const cashierRankingBody = document.getElementById('cashierRankingBody');
+    const jointRankingSection = document.getElementById('jointRankingSection');
+    const jointRankingBody = document.getElementById('jointRankingBody');
     const distributionBody = document.getElementById('distributionBody');
     const tableGroups = groupCodes.slice(1);
+    const staffNames = ['小毛', '王欣', '李佳', '张敏', '陈璐', '赵一鸣', '刘倩', '孙悦', '周宁', '吴昊', '郑洁', '何琳'];
     const periodMap = {
       '昨日': '统计周期：2022-10-29 0:00:00~23:59:59',
       '今日': '统计周期：2022-10-30 0:00:00~23:59:59',
@@ -225,9 +255,10 @@
       const base = 253 - (index * 3 % 92);
       const count = Math.round(base * scale);
       const orders = Math.max(1, Math.round((100 - (index * 2 % 37)) * scale));
+      const joint = Math.max(0, count - orders);
       const amount = Math.round((20235 - (index * 517 % 12800)) * scale);
       const returns = Math.max(0, Math.round((14 - (index % 9)) * Math.max(1, scale / 3)));
-      return { code, count, orders, amount, returns, rate: (count / orders).toFixed(1), rank: index + 1 };
+      return { code, name: staffNames[index % staffNames.length], count, orders, joint, amount, returns, rate: orders ? (joint / orders * 100).toFixed(1) : '0.0', rank: index + 1 };
     }
 
     function currentRows() {
@@ -239,53 +270,37 @@
       return value.toLocaleString('zh-CN');
     }
 
-    function renderTrendChart(summary) {
-      const labels = currentTime === '本年'
-        ? ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月']
-        : currentTime === '本月'
-          ? ['1日', '5日', '10日', '15日', '20日', '25日', '30日']
-          : ['9时', '10时', '11时', '12时', '13时'];
-      const values = labels.map((_, index) => Math.max(12, Math.round(summary.count * (0.48 + ((index * 17) % 39) / 100))));
-      const maxValue = Math.max(...values);
-      const grid = [0, 1, 2, 3, 4].map(i => `<line x1="58" y1="${28 + i * 40}" x2="326" y2="${28 + i * 40}"/>`).join('');
-      const bars = values.map((value, index) => {
-        const slot = 268 / values.length;
-        const barWidth = Math.min(30, slot - 10);
-        const height = Math.max(12, value / maxValue * 146);
-        const x = 66 + index * slot + (slot - barWidth) / 2;
-        const y = 188 - height;
-        return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barWidth.toFixed(1)}" height="${height.toFixed(1)}" rx="4"/>`;
-      }).join('');
-      const ticks = labels.map((label, index) => {
-        const slot = 268 / labels.length;
-        const x = 66 + index * slot + slot / 2 - 10;
-        return `<text x="${x.toFixed(1)}" y="210">${label}</text>`;
-      }).join('');
-      trendChart.innerHTML = `<svg viewBox="0 0 350 230" width="100%" height="100%" aria-label="收银件数柱状图"><g stroke="#e4e9ee">${grid}</g><g fill="#4d5a66" font-size="12"><text x="20" y="32">${formatNumber(maxValue)}</text><text x="20" y="112">${formatNumber(Math.round(maxValue / 2))}</text><text x="34" y="192">0</text></g><g fill="#2f7df0">${bars}</g><g fill="#4d5a66" font-size="12">${ticks}</g></svg><div class="tooltip">${labels[Math.floor(labels.length / 2)]}：${formatNumber(values[Math.floor(values.length / 2)])}件</div>`;
-      bindChartTooltip(trendChart);
+    function renderRanking(body, rows, cells) {
+      body.innerHTML = rows.map((row, index) => `<tr><td class="rank-no">${index + 1}</td>${cells(row)}</tr>`).join('');
     }
 
     function applyFilters() {
       const rows = currentRows();
-      const summary = rows.reduce((acc, row) => ({ count: acc.count + row.count, orders: acc.orders + row.orders, amount: acc.amount + row.amount, returns: acc.returns + row.returns }), { count: 0, orders: 0, amount: 0, returns: 0 });
+      const summary = rows.reduce((acc, row) => ({ count: acc.count + row.count, orders: acc.orders + row.orders, joint: acc.joint + row.joint, amount: acc.amount + row.amount, returns: acc.returns + row.returns }), { count: 0, orders: 0, joint: 0, amount: 0, returns: 0 });
       const leader = rows.slice().sort((a, b) => b.count - a.count)[0] || metricFor(tableGroups[0], 0, currentTime);
+      const cashierRankingRows = rows.slice().sort((a, b) => b.count - a.count).slice(0, 5);
+      const jointRankingRows = rows.slice().sort((a, b) => b.joint - a.joint).slice(0, 5);
       periodText.textContent = periodMap[currentTime];
-      noticePrefix.textContent = currentGroup === '全部柜组' ? `${currentTime}收银件数最高柜组` : `${currentTime}当前柜组`;
-      noticeGroup.textContent = leader.code;
+      noticePrefix.textContent = currentGroup === '全部柜组' ? `${currentTime}收银件数最高员工` : `${currentTime}当前员工`;
+      noticeGroup.textContent = leader.name;
       noticeCount.textContent = `${formatNumber(leader.count)}件`;
       cashierCount.textContent = formatNumber(summary.count);
       momTrend.textContent = `环比 ↑ ${currentTime === '本年' ? 18 : currentTime === '本月' ? 24 : 50}%`;
       yoyTrend.textContent = `同比 ↑ ${currentTime === '本年' ? 12 : currentTime === '本月' ? 19 : 30}%`;
       rankPercent.textContent = currentGroup === '全部柜组' ? '50%' : `${Math.max(8, 60 - leader.rank)}%`;
-      rankChange.textContent = currentGroup === '全部柜组' ? '整体排名按柜组明细展示' : `当前排名第${leader.rank}名`;
+      rankChange.textContent = currentGroup === '全部柜组' ? '整体排名按员工明细展示' : `当前排名第${leader.rank}名`;
       orderCount.textContent = formatNumber(summary.orders);
-      orderTrend.textContent = `环比 ↑ ${currentTime === '昨日' ? 8 : 12}%`;
-      jointRate.textContent = summary.orders ? (summary.count / summary.orders).toFixed(1) : '0.0';
-      jointTrend.textContent = `同比 ↑ ${currentTime === '本年' ? '0.6' : '0.3'}`;
+      orderTrend.textContent = `环比 ↑ ${currentTime === '昨日' ? 8 : 12}%　同比 ↑ ${currentTime === '本年' ? 15 : 18}%`;
+      jointCount.textContent = formatNumber(summary.joint);
+      jointCountTrend.textContent = `环比 ↑ ${currentTime === '昨日' ? 6 : 10}%`;
+      jointRate.textContent = summary.orders ? `${(summary.joint / summary.orders * 100).toFixed(1)}%` : '0.0%';
+      jointTrend.textContent = `环比 ↑ ${currentTime === '昨日' ? '0.1' : '0.2'}　同比 ↑ ${currentTime === '本年' ? '0.6' : '0.3'}`;
       returnAmount.textContent = formatNumber(summary.amount);
       returnCount.textContent = formatNumber(summary.returns);
-      distributionBody.innerHTML = rows.map(row => `<tr><td>${row.code}</td><td>${formatNumber(row.count)}</td><td>${formatNumber(row.orders)}</td><td>${formatNumber(row.amount)}</td><td>${formatNumber(row.returns)}</td></tr>`).join('');
-      renderTrendChart(summary);
+      renderRanking(cashierRankingBody, cashierRankingRows, row => `<td>${row.name}</td><td>${formatNumber(row.orders)}</td><td>${formatNumber(row.count)}</td>`);
+      jointRankingSection.style.display = currentTime === '本月' ? '' : 'none';
+      renderRanking(jointRankingBody, jointRankingRows, row => `<td>${row.name}</td><td>${formatNumber(row.joint)}</td><td>${row.rate}%</td>`);
+      distributionBody.innerHTML = rows.map(row => `<tr><td>${row.name}</td><td>${formatNumber(row.count)}</td><td>${formatNumber(row.orders)}</td><td>${formatNumber(row.joint)}</td><td>${formatNumber(row.amount)}</td><td>${formatNumber(row.returns)}</td></tr>`).join('');
     }
 
     function showPage(name) {
@@ -355,22 +370,6 @@
       document.querySelectorAll('.dropdown.open').forEach(item => item.classList.remove('open'));
     });
 
-    function bindChartTooltip(wrap) {
-      if (wrap.dataset.tooltipBound === 'true') return;
-      wrap.dataset.tooltipBound = 'true';
-      wrap.addEventListener('pointermove', (event) => {
-        const tip = wrap.querySelector('.tooltip');
-        if (!tip) return;
-        const rect = wrap.getBoundingClientRect();
-        tip.style.left = `${event.clientX - rect.left}px`;
-        tip.style.top = `${event.clientY - rect.top}px`;
-        tip.classList.add('visible');
-      });
-      wrap.addEventListener('pointerleave', () => {
-        const tip = wrap.querySelector('.tooltip');
-        if (tip) tip.classList.remove('visible');
-      });
-    }
     applyFilters();
 
   </script>
