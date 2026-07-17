@@ -275,8 +275,8 @@
     const rankingHeadRow = document.getElementById('rankingHeadRow');
     const rankingBody = document.getElementById('rankingBody');
     const distributionBody = document.getElementById('distributionBody');
-    const tableGroups = groupCodes.slice(1);
     const staffNames = ['小毛', '王欣', '李佳', '张敏', '陈璐', '赵一鸣', '刘倩', '孙悦', '周宁', '吴昊', '郑洁', '何琳'];
+    const tableGroups = groupCodes.slice(1, staffNames.length + 1);
     const periodMap = {
       '昨日': '统计周期：2022-10-29 0:00:00~23:59:59',
       '今日': '统计周期：2022-10-30 0:00:00~23:59:59',
@@ -309,7 +309,7 @@
     let currentTime = '今日';
     let currentRankView = 'cashier';
 
-    groupMenu.innerHTML = groupCodes.map((code, index) => `<button class="${index === 0 ? 'active' : ''}" type="button" data-group="${code}">${code}</button>`).join('');
+    groupMenu.innerHTML = ['全部柜组', ...tableGroups].map((code, index) => `<button class="${index === 0 ? 'active' : ''}" type="button" data-group="${code}">${code}</button>`).join('');
 
     function metricFor(code, index, time) {
       const scale = { '昨日': 0.86, '今日': 1, '本月': 18.4, '本年': 142 }[time];
