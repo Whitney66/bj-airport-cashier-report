@@ -57,7 +57,7 @@
     .avatar svg { width: 48px; height: 48px; }
     .staff-name { font-size: 17px; font-weight: 700; }
     .staff-meta { color: #6f7d89; font-size: 13px; flex: none; text-align: right; }
-    .toolbar { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); min-height: 72px; align-items: center; padding: 0 28px; font-size: 16px; gap: 24px; position: relative; z-index: 5; }
+    .toolbar { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); min-height: 58px; align-items: center; padding: 0 22px; font-size: 16px; gap: 18px; position: relative; z-index: 5; }
     .dropdown { position: relative; min-width: 0; }
     .select { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 44px; }
     .select-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -83,13 +83,13 @@
     .down { color: var(--green); }
     .rank-line { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 10px 0 7px; color: #2f4150; font-size: 12px; line-height: 1.35; }
 
-    .note-card { margin: 12px 14px 14px; border: 1px solid #f1ca47; border-radius: 3px; background: #fff; box-shadow: 0 6px 18px rgba(150, 120, 20, .14); overflow: hidden; }
-    .note-head { width: 100%; min-height: 26px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; background: #ffd33d; font-size: 12px; font-weight: 800; }
-    .note-title { padding: 14px 16px 8px; font-size: 16px; font-weight: 800; }
-    .note-body { max-height: 360px; overflow: hidden; transition: max-height .2s ease, padding .2s ease; padding: 0 16px 15px; }
+    .note-card { margin: 12px 14px 14px; border: 1px solid #e5bd31; border-radius: 3px; background: #fff; box-shadow: 0 4px 12px rgba(143, 112, 15, .16); overflow: hidden; }
+    .note-head { width: 100%; min-height: 26px; padding: 0 10px; display: flex; align-items: center; justify-content: space-between; background: #ffd23a; color: #2d2d2d; font-size: 12px; font-weight: 800; }
+    .note-title { padding: 14px 14px 8px; font-size: 16px; font-weight: 800; }
+    .note-body { max-height: 360px; overflow: hidden; transition: max-height .2s ease, padding .2s ease; padding: 0 14px 15px; }
     .note-card.collapsed .note-body { max-height: 0; padding-top: 0; padding-bottom: 0; }
     .note-card.collapsed .note-title { display: none; }
-    .note-highlight { margin-bottom: 10px; padding: 10px 12px; border-left: 4px solid var(--orange); background: #fff5bd; font-size: 14px; font-weight: 700; line-height: 1.55; }
+    .note-highlight { margin-bottom: 10px; padding: 10px 12px; border-left: 4px solid #f0a000; background: #fff5bd; font-size: 14px; font-weight: 700; line-height: 1.55; }
     .note-list { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; }
 
     .column-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
