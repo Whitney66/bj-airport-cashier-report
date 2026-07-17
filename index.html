@@ -24,6 +24,7 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
     body { display: flex; justify-content: center; padding: 18px 0 34px; }
+    .prototype-stage { position: relative; width: min(1180px, calc(100vw - 32px)); display: flex; justify-content: center; }
     button { font: inherit; border: 0; background: none; color: inherit; padding: 0; cursor: pointer; }
 
     .phone { width: 430px; height: 932px; position: relative; background: #050505; border-radius: 64px; padding: 14px; box-shadow: 0 16px 36px rgba(0,0,0,.24), inset 0 0 0 2px #1d2328, inset 0 0 0 5px #101418; }
@@ -83,7 +84,7 @@
     .down { color: var(--green); }
     .rank-line { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 10px 0 7px; color: #2f4150; font-size: 12px; line-height: 1.35; }
 
-    .note-card { margin: 12px 14px 14px; border: 1px solid #e5bd31; border-radius: 3px; background: #fff; box-shadow: 0 4px 12px rgba(143, 112, 15, .16); overflow: hidden; }
+    .note-card { position: absolute; left: 0; top: 120px; width: 360px; border: 1px solid #e5bd31; border-radius: 3px; background: #fff; box-shadow: 0 4px 12px rgba(143, 112, 15, .16); overflow: hidden; }
     .note-head { width: 100%; min-height: 26px; padding: 0 10px; display: flex; align-items: center; justify-content: space-between; background: #ffd23a; color: #2d2d2d; font-size: 12px; font-weight: 800; }
     .note-title { padding: 14px 14px 8px; font-size: 16px; font-weight: 800; }
     .note-body { max-height: 360px; overflow: hidden; transition: max-height .2s ease, padding .2s ease; padding: 0 14px 15px; }
@@ -144,8 +145,13 @@
     .return-details table { width: 100%; min-width: 100%; font-size: 12px; }
     .return-details th, .return-details td { text-align: left; padding: 7px 6px; }
 
+    @media (max-width: 900px) {
+      .prototype-stage { width: auto; }
+      .note-card { display: none; }
+    }
     @media (max-width: 520px) {
       body { padding: 0; background: #000; }
+      .prototype-stage { width: 100vw; }
       .phone { width: 100vw; height: 100vh; border-radius: 0; padding: 0; box-shadow: none; }
       .screen { border-radius: 0; }
       .phone::before, .phone::after, .speaker, .camera { display: none; }
@@ -153,6 +159,12 @@
   </style>
 </head>
 <body>
+  <div class="prototype-stage">
+    <section class="note-card" id="dimensionNote">
+      <button class="note-head" type="button" id="noteToggle"><span>本维度说明</span><span id="noteToggleText">点击收起</span></button>
+      <div class="note-title" id="noteTitle">今日收银分析说明</div>
+      <div class="note-body" id="noteBody"></div>
+    </section>
   <div class="phone">
     <div class="speaker"></div><div class="camera"></div>
     <div class="screen">
@@ -171,12 +183,6 @@
           </div>
           <div class="period" id="periodText">统计周期：2022-10-30 0:00:00~23:59:59</div>
           <div class="notice"><span id="noticePrefix">今日收银件数最高柜组</span><span class="price" id="noticeGroup">72222201</span><span id="noticeCount">253件</span></div>
-
-          <section class="note-card" id="dimensionNote">
-            <button class="note-head" type="button" id="noteToggle"><span>本维度说明</span><span id="noteToggleText">点击收起</span></button>
-            <div class="note-title" id="noteTitle">今日收银分析说明</div>
-            <div class="note-body" id="noteBody"></div>
-          </section>
 
           <div class="content">
             <section class="summary-grid" aria-label="收银指标卡片">
@@ -232,6 +238,7 @@
         </section>
       </main>
     </div>
+  </div>
   </div>
 
   <script>
