@@ -52,11 +52,11 @@
     .back { width: 34px; height: 34px; margin-left: 18px; display: grid; place-items: center; }
     .back svg { width: 24px; height: 24px; stroke-width: 3; }
 
-    .staff-profile { display: grid; grid-template-columns: 56px 1fr; align-items: center; gap: 13px; min-height: 82px; padding: 14px 24px; background: #fff; border-bottom: 1px solid #edf0f3; }
-    .avatar { width: 54px; height: 54px; border-radius: 50%; background: #f0f2f4; display: grid; place-items: center; overflow: hidden; }
+    .staff-profile { display: grid; grid-template-columns: 58px 1fr auto; align-items: center; gap: 13px; min-height: 82px; padding: 14px 24px; background: #fff; border-bottom: 1px solid #edf0f3; }
+    .avatar { width: 54px; height: 54px; border-radius: 50%; background: #f0f2f4; display: grid; place-items: center; overflow: hidden; flex: none; }
     .avatar svg { width: 48px; height: 48px; }
-    .staff-name { font-size: 17px; font-weight: 700; margin-bottom: 5px; }
-    .staff-meta { color: #6f7d89; font-size: 12px; }
+    .staff-name { font-size: 17px; font-weight: 700; }
+    .staff-meta { color: #6f7d89; font-size: 13px; flex: none; text-align: right; }
     .toolbar { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); min-height: 72px; align-items: center; padding: 0 28px; font-size: 16px; gap: 24px; position: relative; z-index: 5; }
     .dropdown { position: relative; min-width: 0; }
     .select { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; min-height: 44px; }
@@ -78,12 +78,23 @@
     .card-title { font-size: 15px; font-weight: 700; }
     .big { font-size: 30px; line-height: 1.25; margin: 9px 0 7px; font-weight: 700; letter-spacing: 0; }
     small { color: var(--muted); font-size: 12px; font-weight: 500; }
-    .trend { display: flex; justify-content: center; gap: 10px; color: var(--red); font-size: 12px; font-weight: 700; }
+    .trend { display: flex; justify-content: center; gap: 10px; font-size: 12px; font-weight: 700; }
+    .up { color: var(--red); }
+    .down { color: var(--green); }
     .rank-line { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 10px 0 7px; color: #2f4150; font-size: 12px; line-height: 1.35; }
 
-    .column-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
-    .metric-tile { min-height: 102px; padding: 15px 12px; text-align: center; }
-    .metric-tile .num { font-size: 23px; font-weight: 700; margin-bottom: 7px; }
+    .note-card { margin: 12px 14px 14px; border: 1px solid #f1ca47; border-radius: 3px; background: #fff; box-shadow: 0 6px 18px rgba(150, 120, 20, .14); overflow: hidden; }
+    .note-head { width: 100%; min-height: 26px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; background: #ffd33d; font-size: 12px; font-weight: 800; }
+    .note-title { padding: 14px 16px 8px; font-size: 16px; font-weight: 800; }
+    .note-body { max-height: 360px; overflow: hidden; transition: max-height .2s ease, padding .2s ease; padding: 0 16px 15px; }
+    .note-card.collapsed .note-body { max-height: 0; padding-top: 0; padding-bottom: 0; }
+    .note-card.collapsed .note-title { display: none; }
+    .note-highlight { margin-bottom: 10px; padding: 10px 12px; border-left: 4px solid var(--orange); background: #fff5bd; font-size: 14px; font-weight: 700; line-height: 1.55; }
+    .note-list { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7; }
+
+    .column-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .metric-tile { min-height: 98px; padding: 13px 6px; text-align: center; }
+    .metric-tile .num { font-size: 20px; font-weight: 700; margin-bottom: 7px; overflow-wrap: anywhere; }
     .metric-tile .label { font-size: 13px; font-weight: 700; color: #2b3642; }
     .metric-tile .sub { margin-top: 8px; color: var(--muted); font-size: 12px; }
     .drill { display: block; width: 100%; height: 100%; color: inherit; }
@@ -91,8 +102,14 @@
 
     .section-title { font-size: 17px; font-weight: 800; margin: 0 0 14px 0; }
     .ranking { padding: 17px 10px 20px; margin-bottom: 14px; overflow: hidden; }
-    .ranking-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 0 4px 12px; }
+    .ranking-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 0 4px 12px; }
+    .ranking-title-block { min-width: 0; }
+    .ranking-title-block .section-title { margin-bottom: 5px; }
     .ranking-note { color: var(--muted); font-size: 12px; font-weight: 600; }
+    .rank-tabs { display: inline-flex; padding: 3px; border-radius: 7px; background: #edf1f5; gap: 2px; }
+    .rank-tab { min-height: 30px; padding: 0 9px; border-radius: 6px; color: #6b7785; font-size: 12px; font-weight: 800; }
+    .rank-tab.active { color: var(--blue); background: #fff; box-shadow: 0 2px 8px rgba(15, 23, 42, .12); }
+    .rank-tab[disabled] { color: #b3bdc8; cursor: not-allowed; }
 
     .distribution { padding: 17px 10px 24px; overflow: hidden; }
     .distribution-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 4px 14px; }
@@ -145,7 +162,8 @@
           <header class="topbar"><button class="back" aria-label="返回"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 4 7 12l8 8"/></svg></button><div class="title">收银分析看板</div><div></div></header>
           <section class="staff-profile" aria-label="员工信息">
             <div class="avatar" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" fill="#eceff2"/><path d="M15 30c6-8 16-11 29-7 4 1 7 4 8 8-9-2-18-1-28 3-4-1-7-2-9-4Z" fill="#222"/><path d="M17 34c7 5 18 8 32 2-1 13-8 20-17 20-8 0-14-7-15-22Z" fill="#f6f7f8"/><path d="M14 24c9 5 23 6 37 1" stroke="#848b92" stroke-width="2"/><circle cx="25" cy="40" r="2" fill="#222"/><circle cx="39" cy="40" r="2" fill="#222"/><path d="M28 48c3 2 6 2 9 0" stroke="#d94f54" stroke-width="2" stroke-linecap="round"/></svg></div>
-            <div><div class="staff-name">小毛</div><div class="staff-meta">122353</div></div>
+            <div class="staff-name">小毛</div>
+            <div class="staff-meta">122353</div>
           </section>
           <div class="toolbar">
             <div class="dropdown" id="groupDropdown"><button class="select" type="button" aria-haspopup="listbox"><span class="select-label" id="groupLabel">全部柜组</span><span class="chev"></span></button><div class="dropdown-menu" id="groupMenu"></div></div>
@@ -154,9 +172,15 @@
           <div class="period" id="periodText">统计周期：2022-10-30 0:00:00~23:59:59</div>
           <div class="notice"><span id="noticePrefix">今日收银件数最高柜组</span><span class="price" id="noticeGroup">72222201</span><span id="noticeCount">253件</span></div>
 
+          <section class="note-card" id="dimensionNote">
+            <button class="note-head" type="button" id="noteToggle"><span>本维度说明</span><span id="noteToggleText">点击收起</span></button>
+            <div class="note-title" id="noteTitle">今日收银分析说明</div>
+            <div class="note-body" id="noteBody"></div>
+          </section>
+
           <div class="content">
             <section class="summary-grid" aria-label="收银指标卡片">
-              <article class="card summary-card"><div class="card-title">收银件数</div><div class="big"><span id="cashierCount">253</span> <small>件</small></div><div class="trend"><span id="momTrend">环比 ↑ 50%</span><span id="yoyTrend">同比 ↑ 30%</span></div></article>
+              <article class="card summary-card"><div class="card-title">收银件数</div><div class="big"><span id="cashierCount">253</span> <small>件</small></div><div class="trend" id="cashierTrend"><span>环比 ↑ 50%</span><span>同比 ↑ 30%</span></div></article>
               <article class="card summary-card"><div class="card-title">件数排名</div><div class="rank-line"><span>超过本柜组<span class="accent" id="rankPercent">50%</span>的收银</span></div><strong id="rankChange">相较昨日上升1名</strong></article>
             </section>
 
@@ -168,24 +192,25 @@
               <article class="card metric-tile"><button class="drill" type="button" data-return-view="count"><div class="num" id="returnCount">14</div><div class="label">退货件数 ›</div><div class="sub">点击查看明细</div></button></article>
             </section>
 
-            <section class="card ranking" aria-label="收银排名">
-              <div class="ranking-head"><h2 class="section-title">收银排名</h2><span class="ranking-note">按收银件数排名</span></div>
+            <section class="card ranking" aria-label="排名">
+              <div class="ranking-head">
+                <div class="ranking-title-block">
+                  <h2 class="section-title" id="rankingTitle">收银排名</h2>
+                  <div class="ranking-note" id="rankingNote">按收银件数排名</div>
+                </div>
+                <div class="rank-tabs" role="tablist" aria-label="排名类型">
+                  <button class="rank-tab active" type="button" data-rank-view="cashier">收银件数</button>
+                  <button class="rank-tab" type="button" data-rank-view="joint">连带件数</button>
+                </div>
+              </div>
               <table>
-                <thead><tr><th>排名</th><th>姓名</th><th>成交单数</th><th>收银件数</th></tr></thead>
-                <tbody id="cashierRankingBody"></tbody>
+                <thead><tr id="rankingHeadRow"><th>排名</th><th>姓名</th><th>成交单数</th><th>收银件数</th></tr></thead>
+                <tbody id="rankingBody"></tbody>
               </table>
             </section>
 
-            <section class="card ranking" id="jointRankingSection" aria-label="连带率排名">
-              <div class="ranking-head"><h2 class="section-title">连带率排名</h2><span class="ranking-note">本月按连带件数排名</span></div>
-              <table>
-                <thead><tr><th>排名</th><th>姓名</th><th>连带件数</th><th>连带率</th></tr></thead>
-                <tbody id="jointRankingBody"></tbody>
-              </table>
-            </section>
-
-            <section class="card distribution" aria-label="销售分布">
-              <div class="distribution-head"><h2 class="section-title">销售分布</h2></div>
+            <section class="card distribution" aria-label="收银情况">
+              <div class="distribution-head"><h2 class="section-title">收银情况</h2></div>
               <div class="table-scroller">
                 <table>
                   <thead><tr><th>姓名</th><th>收银件数</th><th>成交单数</th><th>连带件数</th><th>退货金额</th><th>退货件数</th></tr></thead>
@@ -212,6 +237,10 @@
   <script>
     const pages = { dashboard: document.getElementById('dashboardPage'), returns: document.getElementById('returnPage') };
     const returnTitle = document.getElementById('returnTitle');
+    const dimensionNote = document.getElementById('dimensionNote');
+    const noteToggleText = document.getElementById('noteToggleText');
+    const noteTitle = document.getElementById('noteTitle');
+    const noteBody = document.getElementById('noteBody');
     const groupCodes = ['全部柜组', '72222201', '72222401', '72221301', '72222501', '72221201', '72221501', '72222301', '72222901', '72221601', '72221602', '72221603', '72221604', '72221605', '72221607', '72221801', '72221704', '72222801', '72222802', '72222803', '72222804', '72222805', '72222806', '72221401', '72221606', '72221701', '72221702', '72221802', '72221901', '72221902', '72222601', '72222602', '72222603', '72222604', '72222701', '72222702', '72223001', '72225101', '72225102', '72225103', '72225104'];
     const groupLabel = document.getElementById('groupLabel');
     const groupMenu = document.getElementById('groupMenu');
@@ -221,8 +250,7 @@
     const noticeGroup = document.getElementById('noticeGroup');
     const noticeCount = document.getElementById('noticeCount');
     const cashierCount = document.getElementById('cashierCount');
-    const momTrend = document.getElementById('momTrend');
-    const yoyTrend = document.getElementById('yoyTrend');
+    const cashierTrend = document.getElementById('cashierTrend');
     const rankPercent = document.getElementById('rankPercent');
     const rankChange = document.getElementById('rankChange');
     const orderCount = document.getElementById('orderCount');
@@ -233,9 +261,10 @@
     const jointTrend = document.getElementById('jointTrend');
     const returnAmount = document.getElementById('returnAmount');
     const returnCount = document.getElementById('returnCount');
-    const cashierRankingBody = document.getElementById('cashierRankingBody');
-    const jointRankingSection = document.getElementById('jointRankingSection');
-    const jointRankingBody = document.getElementById('jointRankingBody');
+    const rankingTitle = document.getElementById('rankingTitle');
+    const rankingNote = document.getElementById('rankingNote');
+    const rankingHeadRow = document.getElementById('rankingHeadRow');
+    const rankingBody = document.getElementById('rankingBody');
     const distributionBody = document.getElementById('distributionBody');
     const tableGroups = groupCodes.slice(1);
     const staffNames = ['小毛', '王欣', '李佳', '张敏', '陈璐', '赵一鸣', '刘倩', '孙悦', '周宁', '吴昊', '郑洁', '何琳'];
@@ -245,8 +274,31 @@
       '本月': '统计周期：2022-10-01 0:00:00~2022-10-30 23:59:59',
       '本年': '统计周期：2022-01-01 0:00:00~2022-10-30 23:59:59'
     };
+    const noteMap = {
+      '昨日': {
+        title: '昨日收银分析说明',
+        highlight: '昨日维度展示收银件数、件数排名、成交单数、连带率、连带件数、退货金额与退货件数。',
+        items: ['收银件数：指商品数量，剔除退货。', '件数排名：根据收银件数数据降序排名。', '环比：（当日收银件数/昨天收银件数）*100%；同比：（当日收银件数/去年同期收银件数）*100%。无法对比时展示100%，红色表示上升，绿色表示下降。', '成交单数：不做去重，仅按相同优先级 证件号 > 手机号 > 小票号 计数。', '连带率：(销售商品数量-退货商品数量)/成交单数。', '连带件数：总部EOP《营业员对账汇总表》中，营业员和收银员是同一个人时，对应收银件数计为连带件数。', '退货金额、退货件数取自退货订单，支持查看退货明细；其他值不支持下钻。']
+      },
+      '今日': {
+        title: '今日收银分析说明',
+        highlight: '今日维度展示收银件数、件数排名、成交单数、连带率、连带件数、退货金额与退货件数。',
+        items: ['收银件数：指商品数量，剔除退货。', '件数排名：根据收银件数数据降序排名。', '环比：（当日收银件数/昨天收银件数）*100%；同比：（当日收银件数/去年同期收银件数）*100%。无法对比时展示100%，红色表示上升，绿色表示下降。', '成交单数：不做去重，仅按相同优先级 证件号 > 手机号 > 小票号 计数。', '连带率：(销售商品数量-退货商品数量)/成交单数。', '连带件数：总部EOP《营业员对账汇总表》中，营业员和收银员是同一个人时，对应收银件数计为连带件数。', '退货金额、退货件数取自退货订单，支持查看退货明细；其他值不支持下钻。']
+      },
+      '本月': {
+        title: '本月排名说明',
+        highlight: '本月维度支持在同一排名模块中切换查看收银排名与连带件数排名。',
+        items: ['收银排名：根据收银件数降序排名。', '连带件数排名：根据连带件数降序排名，仅本月维度展示。', '连带件数、成交单数、连带率等指标仍按截至所选时间的本月累计口径计算。']
+      },
+      '本年': {
+        title: '本年收银分析说明',
+        highlight: '本年维度指标不展示环比，只保留同比。',
+        items: ['收银件数、成交单数、连带率、连带件数按截至所选时间的年度累计口径展示。', '排名根据年度累计收银件数降序排名。', '退货金额、退货件数取自退货订单，支持查看退货明细。']
+      }
+    };
     let currentGroup = '全部柜组';
     let currentTime = '今日';
+    let currentRankView = 'cashier';
 
     groupMenu.innerHTML = groupCodes.map((code, index) => `<button class="${index === 0 ? 'active' : ''}" type="button" data-group="${code}">${code}</button>`).join('');
 
@@ -270,36 +322,74 @@
       return value.toLocaleString('zh-CN');
     }
 
+    function trendText(label, value, unit = '%') {
+      const direction = value >= 100 || value > 0 ? 'up' : 'down';
+      const arrow = direction === 'up' ? '↑' : '↓';
+      return `<span class="${direction}">${label} ${arrow} ${value}${unit}</span>`;
+    }
+
+    function renderTrend(el, mom, yoy, unit = '%') {
+      const parts = currentTime === '本年' ? [trendText('同比', yoy, unit)] : [trendText('环比', mom, unit), trendText('同比', yoy, unit)];
+      el.innerHTML = parts.join('');
+    }
+
+    function renderNote() {
+      const note = noteMap[currentTime];
+      noteTitle.textContent = note.title;
+      noteBody.innerHTML = `<div class="note-highlight">${note.highlight}</div><ul class="note-list">${note.items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+    }
+
     function renderRanking(body, rows, cells) {
       body.innerHTML = rows.map((row, index) => `<tr><td class="rank-no">${index + 1}</td>${cells(row)}</tr>`).join('');
+    }
+
+    function renderRankModule(rows) {
+      const jointAvailable = currentTime === '本月';
+      if (!jointAvailable && currentRankView === 'joint') currentRankView = 'cashier';
+      document.querySelectorAll('[data-rank-view]').forEach(btn => {
+        const isJoint = btn.dataset.rankView === 'joint';
+        btn.disabled = isJoint && !jointAvailable;
+        btn.classList.toggle('active', btn.dataset.rankView === currentRankView);
+      });
+
+      if (currentRankView === 'joint') {
+        const ranked = rows.slice().sort((a, b) => b.joint - a.joint).slice(0, 5);
+        rankingTitle.textContent = '连带率排名';
+        rankingNote.textContent = '本月按连带件数排名';
+        rankingHeadRow.innerHTML = '<th>排名</th><th>姓名</th><th>连带件数</th><th>连带率</th>';
+        renderRanking(rankingBody, ranked, row => `<td>${row.name}</td><td>${formatNumber(row.joint)}</td><td>${row.rate}%</td>`);
+        return;
+      }
+
+      const ranked = rows.slice().sort((a, b) => b.count - a.count).slice(0, 5);
+      rankingTitle.textContent = '收银排名';
+      rankingNote.textContent = '按收银件数排名';
+      rankingHeadRow.innerHTML = '<th>排名</th><th>姓名</th><th>成交单数</th><th>收银件数</th>';
+      renderRanking(rankingBody, ranked, row => `<td>${row.name}</td><td>${formatNumber(row.orders)}</td><td>${formatNumber(row.count)}</td>`);
     }
 
     function applyFilters() {
       const rows = currentRows();
       const summary = rows.reduce((acc, row) => ({ count: acc.count + row.count, orders: acc.orders + row.orders, joint: acc.joint + row.joint, amount: acc.amount + row.amount, returns: acc.returns + row.returns }), { count: 0, orders: 0, joint: 0, amount: 0, returns: 0 });
       const leader = rows.slice().sort((a, b) => b.count - a.count)[0] || metricFor(tableGroups[0], 0, currentTime);
-      const cashierRankingRows = rows.slice().sort((a, b) => b.count - a.count).slice(0, 5);
-      const jointRankingRows = rows.slice().sort((a, b) => b.joint - a.joint).slice(0, 5);
       periodText.textContent = periodMap[currentTime];
+      renderNote();
       noticePrefix.textContent = currentGroup === '全部柜组' ? `${currentTime}收银件数最高员工` : `${currentTime}当前员工`;
       noticeGroup.textContent = leader.name;
       noticeCount.textContent = `${formatNumber(leader.count)}件`;
       cashierCount.textContent = formatNumber(summary.count);
-      momTrend.textContent = `环比 ↑ ${currentTime === '本年' ? 18 : currentTime === '本月' ? 24 : 50}%`;
-      yoyTrend.textContent = `同比 ↑ ${currentTime === '本年' ? 12 : currentTime === '本月' ? 19 : 30}%`;
+      renderTrend(cashierTrend, currentTime === '本月' ? 124 : 150, currentTime === '本年' ? 112 : currentTime === '本月' ? 119 : 130);
       rankPercent.textContent = currentGroup === '全部柜组' ? '50%' : `${Math.max(8, 60 - leader.rank)}%`;
       rankChange.textContent = currentGroup === '全部柜组' ? '整体排名按员工明细展示' : `当前排名第${leader.rank}名`;
       orderCount.textContent = formatNumber(summary.orders);
-      orderTrend.textContent = `环比 ↑ ${currentTime === '昨日' ? 8 : 12}%　同比 ↑ ${currentTime === '本年' ? 15 : 18}%`;
+      renderTrend(orderTrend, currentTime === '昨日' ? 108 : 112, currentTime === '本年' ? 115 : 118);
       jointCount.textContent = formatNumber(summary.joint);
-      jointCountTrend.textContent = `环比 ↑ ${currentTime === '昨日' ? 6 : 10}%`;
+      renderTrend(jointCountTrend, currentTime === '昨日' ? 106 : 110, currentTime === '本年' ? 113 : 116);
       jointRate.textContent = summary.orders ? `${(summary.joint / summary.orders * 100).toFixed(1)}%` : '0.0%';
-      jointTrend.textContent = `环比 ↑ ${currentTime === '昨日' ? '0.1' : '0.2'}　同比 ↑ ${currentTime === '本年' ? '0.6' : '0.3'}`;
+      renderTrend(jointTrend, currentTime === '昨日' ? '0.1' : '0.2', currentTime === '本年' ? '0.6' : '0.3', '');
       returnAmount.textContent = formatNumber(summary.amount);
       returnCount.textContent = formatNumber(summary.returns);
-      renderRanking(cashierRankingBody, cashierRankingRows, row => `<td>${row.name}</td><td>${formatNumber(row.orders)}</td><td>${formatNumber(row.count)}</td>`);
-      jointRankingSection.style.display = currentTime === '本月' ? '' : 'none';
-      renderRanking(jointRankingBody, jointRankingRows, row => `<td>${row.name}</td><td>${formatNumber(row.joint)}</td><td>${row.rate}%</td>`);
+      renderRankModule(rows);
       distributionBody.innerHTML = rows.map(row => `<tr><td>${row.name}</td><td>${formatNumber(row.count)}</td><td>${formatNumber(row.orders)}</td><td>${formatNumber(row.joint)}</td><td>${formatNumber(row.amount)}</td><td>${formatNumber(row.returns)}</td></tr>`).join('');
     }
 
@@ -344,6 +434,20 @@
         document.querySelectorAll('[data-time]').forEach(btn => btn.classList.toggle('active', btn === timeBtn));
         timeBtn.closest('.dropdown').classList.remove('open');
         applyFilters();
+        return;
+      }
+
+      const rankBtn = event.target.closest('[data-rank-view]');
+      if (rankBtn && !rankBtn.disabled) {
+        currentRankView = rankBtn.dataset.rankView;
+        applyFilters();
+        return;
+      }
+
+      const noteBtn = event.target.closest('#noteToggle');
+      if (noteBtn) {
+        dimensionNote.classList.toggle('collapsed');
+        noteToggleText.textContent = dimensionNote.classList.contains('collapsed') ? '点击展开' : '点击收起';
         return;
       }
 
