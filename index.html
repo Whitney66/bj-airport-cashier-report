@@ -86,6 +86,7 @@
     .rank-line { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 10px 0 7px; color: #2f4150; font-size: 12px; line-height: 1.35; }
 
     .note-card { position: absolute; left: 0; top: 120px; width: 360px; border: 1px solid #e5bd31; border-radius: 3px; background: #fff; box-shadow: 0 4px 12px rgba(143, 112, 15, .16); overflow: hidden; }
+    .note-card.secondary { top: 470px; }
     .note-head { width: 100%; min-height: 26px; padding: 0 10px; display: flex; align-items: center; justify-content: space-between; background: #ffd23a; color: #2d2d2d; font-size: 12px; font-weight: 800; }
     .note-title { padding: 14px 14px 8px; font-size: 16px; font-weight: 800; }
     .note-body { max-height: 360px; overflow: hidden; transition: max-height .2s ease, padding .2s ease; padding: 0 14px 15px; }
@@ -165,6 +166,11 @@
       <button class="note-head" type="button" id="noteToggle"><span>本维度说明</span><span id="noteToggleText">点击收起</span></button>
       <div class="note-title" id="noteTitle">今日收银分析说明</div>
       <div class="note-body" id="noteBody"></div>
+    </section>
+    <section class="note-card secondary" id="extraNote">
+      <button class="note-head" type="button" id="extraNoteToggle"><span>其它说明</span><span id="extraNoteToggleText">点击收起</span></button>
+      <div class="note-title" id="extraNoteTitle">本月其它说明</div>
+      <div class="note-body" id="extraNoteBody"></div>
     </section>
   <div class="phone">
     <div class="speaker"></div><div class="camera"></div>
@@ -251,6 +257,10 @@
     const noteToggleText = document.getElementById('noteToggleText');
     const noteTitle = document.getElementById('noteTitle');
     const noteBody = document.getElementById('noteBody');
+    const extraNote = document.getElementById('extraNote');
+    const extraNoteToggleText = document.getElementById('extraNoteToggleText');
+    const extraNoteTitle = document.getElementById('extraNoteTitle');
+    const extraNoteBody = document.getElementById('extraNoteBody');
     const groupCodes = ['全部柜组', '72222201', '72222401', '72221301', '72222501', '72221201', '72221501', '72222301', '72222901', '72221601', '72221602', '72221603', '72221604', '72221605', '72221607', '72221801', '72221704', '72222801', '72222802', '72222803', '72222804', '72222805', '72222806', '72221401', '72221606', '72221701', '72221702', '72221802', '72221901', '72221902', '72222601', '72222602', '72222603', '72222604', '72222701', '72222702', '72223001', '72225101', '72225102', '72225103', '72225104'];
     const groupLabel = document.getElementById('groupLabel');
     const groupMenu = document.getElementById('groupMenu');
@@ -298,13 +308,25 @@
       },
       '本月': {
         title: '本月收银分析说明',
-        highlight: '本月维度展示本月累计指标，并支持在同一排名模块中切换查看收银排名与连带件数排名。',
-        items: ['收银件数：指商品数量，剔除退货，按本月累计展示。', '件数排名/收银排名：根据本月累计收银件数降序排名。', '连带件数排名：根据本月累计连带件数降序排名，仅本月维度展示。', '环比、同比无法对比时展示100%，红色表示上升，绿色表示下降。', '成交单数：不做去重，仅按相同优先级 证件号 > 手机号 > 小票号 计数。', '连带率：(销售商品数量-退货商品数量)/成交单数。', '连带件数：总部EOP《营业员对账汇总表》中，营业员和收银员是同一个人时，对应收银件数计为连带件数。', '退货金额、退货件数取自退货订单，支持查看退货明细；其他值不支持下钻。']
+        highlight: '本月维度展示本月累计收银指标。',
+        items: ['收银件数：指商品数量，剔除退货，按本月累计展示。', '环比、同比无法对比时展示100%，红色表示上升，绿色表示下降。', '成交单数：不做去重，仅按相同优先级 证件号 > 手机号 > 小票号 计数。', '连带率：(销售商品数量-退货商品数量)/成交单数。', '连带件数：总部EOP《营业员对账汇总表》中，营业员和收银员是同一个人时，对应收银件数计为连带件数。', '退货金额、退货件数取自退货订单，支持查看退货明细；其他值不支持下钻。']
       },
       '本年': {
         title: '本年收银分析说明',
         highlight: '本年维度展示年度累计指标，指标不展示环比，只保留同比。',
-        items: ['收银件数：指商品数量，剔除退货，按年度累计展示。', '件数排名/收银排名：根据年度累计收银件数降序排名。', '同比无法对比时展示100%，红色表示上升，绿色表示下降。', '成交单数：不做去重，仅按相同优先级 证件号 > 手机号 > 小票号 计数。', '连带率：(销售商品数量-退货商品数量)/成交单数。', '连带件数：总部EOP《营业员对账汇总表》中，营业员和收银员是同一个人时，对应收银件数计为连带件数。', '退货金额、退货件数取自退货订单，支持查看退货明细；其他值不支持下钻。']
+        items: ['收银件数：指商品数量，剔除退货，按年度累计展示。', '同比无法对比时展示100%，红色表示上升，绿色表示下降。', '成交单数：不做去重，仅按相同优先级 证件号 > 手机号 > 小票号 计数。', '连带率：(销售商品数量-退货商品数量)/成交单数。', '连带件数：总部EOP《营业员对账汇总表》中，营业员和收银员是同一个人时，对应收银件数计为连带件数。', '退货金额、退货件数取自退货订单，支持查看退货明细；其他值不支持下钻。']
+      }
+    };
+    const extraNoteMap = {
+      '本月': {
+        title: '本月其它说明',
+        highlight: '本月维度额外展示排名切换规则。',
+        items: ['收银排名：根据本月累计收银件数降序排名。', '连带件数排名：根据本月累计连带件数降序排名，仅本月维度展示。', '同一排名模块中可切换收银件数与连带件数排序口径，表头指标保持一致。']
+      },
+      '本年': {
+        title: '本年其它说明',
+        highlight: '本年维度保留年度累计排名规则。',
+        items: ['件数排名/收银排名：根据年度累计收银件数降序排名。', '本年不涉及连带件数排名切换，仅展示收银排名。', '指标趋势不展示环比，只保留同比。']
       }
     };
     let currentGroup = '全部柜组';
@@ -349,6 +371,13 @@
       const note = noteMap[currentTime];
       noteTitle.textContent = note.title;
       noteBody.innerHTML = `<div class="note-highlight">${note.highlight}</div><ul class="note-list">${note.items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+
+      const extra = extraNoteMap[currentTime];
+      extraNote.style.display = extra ? '' : 'none';
+      if (extra) {
+        extraNoteTitle.textContent = extra.title;
+        extraNoteBody.innerHTML = `<div class="note-highlight">${extra.highlight}</div><ul class="note-list">${extra.items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+      }
     }
 
     function renderRanking(body, rows, cells) {
@@ -460,6 +489,13 @@
       if (noteBtn) {
         dimensionNote.classList.toggle('collapsed');
         noteToggleText.textContent = dimensionNote.classList.contains('collapsed') ? '点击展开' : '点击收起';
+        return;
+      }
+
+      const extraNoteBtn = event.target.closest('#extraNoteToggle');
+      if (extraNoteBtn) {
+        extraNote.classList.toggle('collapsed');
+        extraNoteToggleText.textContent = extraNote.classList.contains('collapsed') ? '点击展开' : '点击收起';
         return;
       }
 
