@@ -80,6 +80,7 @@
     .big { font-size: 30px; line-height: 1.25; margin: 9px 0 7px; font-weight: 700; letter-spacing: 0; }
     small { color: var(--muted); font-size: 12px; font-weight: 500; }
     .trend { display: flex; justify-content: center; gap: 10px; font-size: 12px; font-weight: 700; }
+    .metric-tile .trend { flex-direction: column; align-items: center; gap: 2px; line-height: 1.25; }
     .up { color: var(--red); }
     .down { color: var(--green); }
     .rank-line { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 10px 0 7px; color: #2f4150; font-size: 12px; line-height: 1.35; }
@@ -97,7 +98,7 @@
     .metric-tile { min-height: 98px; padding: 13px 6px; text-align: center; }
     .metric-tile .num { font-size: 20px; font-weight: 700; margin-bottom: 7px; overflow-wrap: anywhere; }
     .metric-tile .label { font-size: 13px; font-weight: 700; color: #2b3642; }
-    .metric-tile .sub { margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .metric-tile .sub { margin-top: 8px; color: var(--muted); font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 2px; line-height: 1.25; }
     .drill { display: block; width: 100%; height: 100%; color: inherit; }
     .drill .num, .linkish { color: var(--blue); }
 
@@ -270,6 +271,7 @@
     const returnCount = document.getElementById('returnCount');
     const rankingTitle = document.getElementById('rankingTitle');
     const rankingNote = document.getElementById('rankingNote');
+    const rankTabs = document.querySelector('.rank-tabs');
     const rankingHeadRow = document.getElementById('rankingHeadRow');
     const rankingBody = document.getElementById('rankingBody');
     const distributionBody = document.getElementById('distributionBody');
@@ -330,9 +332,10 @@
     }
 
     function trendText(label, value, unit = '%') {
-      const direction = value >= 100 || value > 0 ? 'up' : 'down';
+      const numeric = Number(value);
+      const direction = unit === '%' ? (numeric >= 100 ? 'up' : 'down') : (numeric >= 0 ? 'up' : 'down');
       const arrow = direction === 'up' ? '↑' : '↓';
-      return `<span class="${direction}">${label} ${arrow} ${value}${unit}</span>`;
+      return `<span class="${direction}">${label} ${arrow} ${Math.abs(numeric)}${unit}</span>`;
     }
 
     function renderTrend(el, mom, yoy, unit = '%') {
@@ -352,10 +355,10 @@
 
     function renderRankModule(rows) {
       const jointAvailable = currentTime === '本月';
-      if (!jointAvailable && currentRankView === 'joint') currentRankView = 'cashier';
+      if (!jointAvailable) currentRankView = 'cashier';
+      rankTabs.style.display = jointAvailable ? 'inline-flex' : 'none';
       document.querySelectorAll('[data-rank-view]').forEach(btn => {
-        const isJoint = btn.dataset.rankView === 'joint';
-        btn.disabled = isJoint && !jointAvailable;
+        btn.disabled = false;
         btn.classList.toggle('active', btn.dataset.rankView === currentRankView);
       });
 
@@ -389,11 +392,11 @@
       rankPercent.textContent = currentGroup === '全部柜组' ? '50%' : `${Math.max(8, 60 - leader.rank)}%`;
       rankChange.textContent = currentGroup === '全部柜组' ? '整体排名按员工明细展示' : `当前排名第${leader.rank}名`;
       orderCount.textContent = formatNumber(summary.orders);
-      renderTrend(orderTrend, currentTime === '昨日' ? 108 : 112, currentTime === '本年' ? 115 : 118);
+      renderTrend(orderTrend, currentTime === '昨日' ? 96 : 112, currentTime === '本年' ? 115 : 118);
       jointCount.textContent = formatNumber(summary.joint);
-      renderTrend(jointCountTrend, currentTime === '昨日' ? 106 : 110, currentTime === '本年' ? 113 : 116);
+      renderTrend(jointCountTrend, currentTime === '昨日' ? 106 : 94, currentTime === '本年' ? 113 : 116);
       jointRate.textContent = summary.orders ? `${(summary.joint / summary.orders * 100).toFixed(1)}%` : '0.0%';
-      renderTrend(jointTrend, currentTime === '昨日' ? '0.1' : '0.2', currentTime === '本年' ? '0.6' : '0.3', '');
+      renderTrend(jointTrend, currentTime === '昨日' ? '-0.1' : '0.2', currentTime === '本年' ? '-0.2' : '0.3', '');
       returnAmount.textContent = formatNumber(summary.amount);
       returnCount.textContent = formatNumber(summary.returns);
       renderRankModule(rows);
