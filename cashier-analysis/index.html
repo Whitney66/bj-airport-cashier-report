@@ -287,8 +287,21 @@
     const rankingHeadRow = document.getElementById('rankingHeadRow');
     const rankingBody = document.getElementById('rankingBody');
     const distributionBody = document.getElementById('distributionBody');
-    const staffNames = ['小毛', '王欣', '李佳', '张敏', '陈璐', '赵一鸣', '刘倩', '孙悦', '周宁', '吴昊', '郑洁', '何琳'];
-    const tableGroups = groupCodes.slice(1, staffNames.length + 1);
+    const staffList = [
+      { id: '122353', name: '小毛' },
+      { id: '122354', name: '王欣' },
+      { id: '122355', name: '李佳' },
+      { id: '122356', name: '张敏' },
+      { id: '122357', name: '陈璐' },
+      { id: '122358', name: '赵一鸣' },
+      { id: '122359', name: '刘倩' },
+      { id: '122360', name: '孙悦' },
+      { id: '122361', name: '周宁' },
+      { id: '122362', name: '吴昊' },
+      { id: '122363', name: '郑洁' },
+      { id: '122364', name: '何琳' }
+    ];
+    const tableGroups = groupCodes.slice(1, staffList.length + 1);
     const periodMap = {
       '昨日': '统计周期：2022-10-29 0:00:00~23:59:59',
       '今日': '统计周期：2022-10-30 0:00:00~23:59:59',
@@ -343,7 +356,8 @@
       const joint = Math.max(0, count - orders);
       const amount = Math.round((20235 - (index * 517 % 12800)) * scale);
       const returns = Math.max(0, Math.round((14 - (index % 9)) * Math.max(1, scale / 3)));
-      return { code, name: staffNames[index % staffNames.length], count, orders, joint, amount, returns, rate: orders ? (joint / orders * 100).toFixed(1) : '0.0', rank: index + 1 };
+      const staff = staffList[index % staffList.length];
+      return { code, name: `【${staff.id}】${staff.name}`, count, orders, joint, amount, returns, rate: orders ? (joint / orders * 100).toFixed(1) : '0.0', rank: index + 1 };
     }
 
     function currentRows() {
