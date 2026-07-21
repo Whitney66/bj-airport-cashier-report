@@ -122,15 +122,15 @@
     .table-scroller::-webkit-scrollbar { height: 7px; }
     .table-scroller::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 999px; }
     .table-scroller::-webkit-scrollbar-thumb { background: #bfc4c8; border-radius: 999px; }
-    table { border-collapse: separate; border-spacing: 0; min-width: 520px; width: 520px; background: #fff; font-size: 13px; table-layout: fixed; }
-    .ranking table { min-width: 650px; width: 650px; }
+    table { border-collapse: separate; border-spacing: 0; min-width: 620px; width: 620px; background: #fff; font-size: 13px; table-layout: fixed; }
+    .ranking table { min-width: 720px; width: 720px; }
     .ranking td:first-child, .ranking th:first-child { width: 58px; min-width: 58px; max-width: 58px; text-align: center; }
-    .ranking th:nth-child(2), .ranking td:nth-child(2) { width: 96px; }
+    .ranking th:nth-child(2), .ranking td:nth-child(2) { width: 166px; }
     .ranking th:nth-child(3), .ranking td:nth-child(3), .ranking th:nth-child(4), .ranking td:nth-child(4) { width: auto; }
     .rank-no { font-weight: 800; color: var(--blue); }
     th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px 6px; text-align: center; white-space: nowrap; }
     th { font-weight: 600; border-top: 1px solid var(--line); background: #fbfcfd; }
-    td:first-child, th:first-child { position: sticky; left: 0; z-index: 2; width: 108px; min-width: 108px; max-width: 108px; text-align: left; background: #fff; border-left: 1px solid var(--line); box-shadow: 5px 0 8px rgba(0,0,0,.04); }
+    td:first-child, th:first-child { position: sticky; left: 0; z-index: 2; width: 170px; min-width: 170px; max-width: 170px; text-align: left; background: #fff; border-left: 1px solid var(--line); box-shadow: 5px 0 8px rgba(0,0,0,.04); }
     th:nth-child(2), td:nth-child(2) { width: 82px; }
     th:nth-child(3), td:nth-child(3) { width: 74px; }
     th:nth-child(4), td:nth-child(4) { width: 102px; }
@@ -357,7 +357,7 @@
       const amount = Math.round((20235 - (index * 517 % 12800)) * scale);
       const returns = Math.max(0, Math.round((14 - (index % 9)) * Math.max(1, scale / 3)));
       const staff = staffList[index % staffList.length];
-      return { code, name: `【${staff.id}】${staff.name}`, count, orders, joint, amount, returns, rate: orders ? (joint / orders * 100).toFixed(1) : '0.0', rank: index + 1 };
+      return { code, name: `[${staff.id}]${staff.name}`, count, orders, joint, amount, returns, rate: orders ? (joint / orders * 100).toFixed(1) : '0.0', rank: index + 1 };
     }
 
     function currentRows() {
